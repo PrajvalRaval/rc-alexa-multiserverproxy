@@ -60,10 +60,14 @@ module.exports = server => {
             var headers = loginData.headers;
             const _id = Math.floor(100000 + Math.random() * 900000);
 
+            const serverinfo = {
+                "serverurl": serverurl,
+                "servername": servername
+            }
+
             const register = new Register({
                 _id,
-                serverurl,
-                servername,
+                serverinfo,
                 headers
             });
 
