@@ -20,14 +20,9 @@ db.on('error', err =>
     console.log(err)
 );
 
-routes(server);
-
 db.once('open', () => {
-    //require('./routes/register')(server);
-    //require('./routes/data')(server);
+    routes(server);
     console.log(`Server Started on ${config.PORT}`);
 });
-
-
 
 module.exports = server;
