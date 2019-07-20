@@ -1,12 +1,13 @@
-const errors = require('restify-errors');
 const Register = require('../models/Register');
 const functions = require('../functions/helpers');
+const errors = require('restify-errors');
 
 module.exports = server => {
 
     server.get('/ping', (req, res, next) => {
-        res.send({
-            msg: 'pong'
+        res.send(200,{
+            message: 'pong',
+            status: true
         });
         next();
     });
@@ -28,7 +29,7 @@ module.exports = server => {
 
         var loginData = await functions.login(serverurl, username, password);
 
-        if (loginData.status == 'true') {
+        if (loginData.status == true) {
 
             var headers = loginData.headers;
             const _id = Math.floor(100000 + Math.random() * 900000);
@@ -47,9 +48,16 @@ module.exports = server => {
             register.save()
             .then()
             .catch(err => {
-                console.log(err);
-                return next(new errors.NotFoundError("Cannot Save Data in Database"));
 
+                console.log(err);
+                
+                res.send(400,{
+                    message: "Cannot Save Data in Database",
+                    status: false
+                });
+    
+                next();
+    
             });
     
             res.send({
@@ -61,7 +69,14 @@ module.exports = server => {
             next();
 
         } else {
-            return next(new errors.UnauthorizedError("Authorisation failed"));
+
+            res.send(401,{
+                message: "Authorization failed",
+                status: false
+            });
+
+            next();
+
         }
 
     });

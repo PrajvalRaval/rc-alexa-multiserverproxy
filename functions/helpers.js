@@ -11,7 +11,7 @@ const login = async (serverurl, username, password) =>
         //console.log(res);
 
         return {
-            status: 'true',
+            status: true,
             headers: {
                 "X-Auth-Token": res.data.authToken,
                 "X-User-Id": res.data.userId
@@ -22,7 +22,8 @@ const login = async (serverurl, username, password) =>
     .catch((err) => {
         //console.log(err);
         return {
-            status: 'false',
+            message: "Authorization Failed",
+            status: false,
         }
     });
 

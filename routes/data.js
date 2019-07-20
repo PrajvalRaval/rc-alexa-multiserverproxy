@@ -1,5 +1,7 @@
-const errors = require('restify-errors');
 const Register = require('../models/Register');
+const errors = require('restify-errors');
+
+
 
 module.exports = server => {
 
@@ -18,16 +20,35 @@ module.exports = server => {
 
             const data = await Register.findOne({_id: qcode});
 
-            res.send({
-                data:data,
-                status: true
+            if(data){
+                
+                res.send(200,{
+                    data:data,
+                    status: true
+                });
+    
+                next();
+
+            } else {
+
+                res.send(404,{
+                    message:"No Record Found",
+                    status: false
+                });
+    
+                next();
+
+            }
+
+        } catch {
+
+            res.send(404,{
+                message:"No Record Found",
+                status: false
             });
 
             next();
 
-
-        } catch {
-            return next(new errors.NotFoundError("No Record Found"));
         }
 
     });
