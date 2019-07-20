@@ -1,11 +1,10 @@
 const Register = require('../models/Register');
-const functions = require('../functions/helpers');
 const errors = require('restify-errors');
 
 module.exports = server => {
 
     server.get('/ping', (req, res, next) => {
-        res.send(200,{
+        res.send(200, {
             message: 'pong',
             status: true
         });
@@ -23,61 +22,67 @@ module.exports = server => {
         const {
             serverurl,
             servername,
-            username,
-            password
+            userid,
+            token
         } = req.body;
 
-        var loginData = await functions.login(serverurl, username, password);
+        const _id = Math.floor(100000 + Math.random() * 900000);
 
-        if (loginData.status == true) {
+        const serverinfo = {
+            "serverurl": serverurl,
+            "servername": servername
+        };
 
-            var headers = loginData.headers;
-            const _id = Math.floor(100000 + Math.random() * 900000);
+        var headers = {
+            "X-Auth-Token": userid,
+            "X-User-Id": token
+        };
 
-            const serverinfo = {
-                "serverurl": serverurl,
-                "servername": servername
-            }
+        const register = new Register({
+            _id,
+            serverinfo,
+            headers
+        });
 
-            const register = new Register({
-                _id,
-                serverinfo,
-                headers
-            });
+        Register.findOne({
+            _id: _id
+        }).then(user => {
+            if (user) {
 
-            register.save()
-            .then()
-            .catch(err => {
-
-                console.log(err);
-                
-                res.send(400,{
-                    message: "Cannot Save Data in Database",
+                res.send(500, {
+                    message: "Internal Server Error",
                     status: false
                 });
-    
+
                 next();
-    
-            });
-    
-            res.send({
-                code: _id,
-                expiry: 5,
-                status: true
-            });
 
-            next();
+            } else {
 
-        } else {
+                register.save()
+                    .then()
+                    .catch(err => {
 
-            res.send(401,{
-                message: "Authorization failed",
-                status: false
-            });
+                        console.log(err);
 
-            next();
+                        res.send(400, {
+                            message: "Cannot Save Data in Database",
+                            status: false
+                        });
 
-        }
+                        next();
+
+                    });
+
+                res.send({
+                    code: _id,
+                    expiry: 5,
+                    status: true
+                });
+
+                next();
+
+            }
+        });
 
     });
 

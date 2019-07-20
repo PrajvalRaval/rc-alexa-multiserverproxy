@@ -1,8 +1,6 @@
 const Register = require('../models/Register');
 const errors = require('restify-errors');
 
-
-
 module.exports = server => {
 
 
