@@ -26,4 +26,4 @@ const login = async (serverurl, username, password) =>
         }
     });
 
-    module.exports.login = login;
+module.exports.login = login;
