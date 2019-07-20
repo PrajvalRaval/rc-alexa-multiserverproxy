@@ -58,20 +58,20 @@ module.exports = server => {
 
             } else {
 
+                if (!serverurl || !servername || !userid || !token) {
+
+                    res.send(400, {
+                        message: "User validation failed",
+                        status: false
+                    });
+
+                    next();
+
+                }
+
                 register.save()
                     .then()
-                    .catch(err => {
-
-                        console.log(err);
-
-                        res.send(400, {
-                            message: "Cannot Save Data in Database",
-                            status: false
-                        });
-
-                        next();
-
-                    });
+                    .catch();
 
                 res.send({
                     code: _id,
