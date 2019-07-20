@@ -3,7 +3,6 @@ const errors = require('restify-errors');
 
 module.exports = server => {
 
-
     server.get('/user/data', async (req, res, next) => {
 
         try {
@@ -40,8 +39,8 @@ module.exports = server => {
 
         } catch {
 
-            res.send(404,{
-                message:"No Record Found",
+            res.send(500,{
+                message:"Internal Server Error",
                 status: false
             });
 
