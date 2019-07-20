@@ -1,33 +1,6 @@
 const errors = require('restify-errors');
-const axios = require('axios');
-const Register = require('../models/Register')
-
-
-const login = async (serverurl, username, password) =>
-    await axios
-    .post(`${ serverurl }/api/v1/login`, {
-        user: username,
-        password: password,
-    })
-    .then((res) => res.data)
-    .then((res) => {
-        //console.log(res);
-
-        return {
-            status: 'true',
-            headers: {
-                "X-Auth-Token": res.data.authToken,
-                "X-User-Id": res.data.userId
-            }
-        };
-
-    })
-    .catch((err) => {
-        //console.log(err);
-        return {
-            status: 'false',
-        }
-    });
+const Register = require('../models/Register');
+const functions = require('../functions/helpers');
 
 module.exports = server => {
 
@@ -53,7 +26,7 @@ module.exports = server => {
             password
         } = req.body;
 
-        var loginData = await login(serverurl, username, password);
+        var loginData = await functions.login(serverurl, username, password);
 
         if (loginData.status == 'true') {
 
