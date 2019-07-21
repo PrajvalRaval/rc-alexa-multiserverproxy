@@ -13,7 +13,7 @@ module.exports = server => {
               //  return next(new errors.InvalidContentError("Expects 'application/json'"));
             //}
 
-            var qcode = JSON.parse(req.body).qcode;
+            var qcode = req.body.qcode;
 
             const data = await Register.findOne({_id: qcode});
 
