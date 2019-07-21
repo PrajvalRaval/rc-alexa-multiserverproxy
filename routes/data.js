@@ -9,9 +9,9 @@ module.exports = server => {
 
             //Check For JSON
 
-            if (!req.is('application/json')) {
-                return next(new errors.InvalidContentError("Expects 'application/json'"));
-            }
+            //if (!req.is('application/json')) {
+              //  return next(new errors.InvalidContentError("Expects 'application/json'"));
+            //}
 
             var qcode = JSON.parse(req.body).qcode;
 
